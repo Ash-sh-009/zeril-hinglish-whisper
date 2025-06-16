@@ -1,10 +1,9 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Copy, Download, FileText } from 'lucide-react';
+import { Copy, Download, FileText, Github, Zap } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export const FileGenerator = () => {
@@ -19,16 +18,26 @@ export const FileGenerator = () => {
     });
   };
 
+  const deployToGitHub = () => {
+    const repoUrl = 'https://github.com/new';
+    window.open(repoUrl, '_blank');
+    toast({
+      title: "🚀 Creating GitHub Repo",
+      description: "Upload all files and deploy to Render!",
+    });
+  };
+
   const files = {
     bot: {
       name: 'bot.py',
-      description: 'Main bot file with ZERIL personality',
+      description: 'Main ZERIL bot with full AI features - Auto-responds when deployed!',
       content: `#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-ZERIL - Hinglish Telegram Bot
+ZERIL - Hinglish Telegram Bot Queen 👑
 Created by @ash_yv
 A sarcastic, emotionally intelligent Hinglish bot
+DEPLOYMENT: Auto-starts when deployed to Render/Railway/Heroku
 """
 
 import os
@@ -38,8 +47,6 @@ import random
 from datetime import datetime
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
-from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
-import torch
 
 # Configure logging
 logging.basicConfig(
@@ -50,111 +57,148 @@ logger = logging.getLogger(__name__)
 
 class ZerilBot:
     def __init__(self):
-        self.bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
-        self.hf_token = os.getenv('HUGGINGFACE_API_KEY')
+        # Bot credentials (pre-configured)
+        self.bot_token = os.getenv('TELEGRAM_BOT_TOKEN', '8048986424:AAE37IBwkCzE5oKtGCdN-mnnsMrcrlzGWUQ')
+        self.hf_token = os.getenv('HUGGINGFACE_API_KEY', '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')
         
-        # Bot Configuration
+        # Bot personality
         self.bot_name = "ZERIL"
         self.owner_tag = "@ash_yv"
-        self.hinglish_ratio = 0.6  # 60% Hinglish, 40% detected language
         
-        # Initialize AI Models
-        self.init_models()
-        
-        # Emotional responses
+        # Response templates
         self.emotional_responses = {
-            'happy': ['Mast hai yaar! 🔥', 'Bahut accha! ❤️', 'Khushi ki baat hai! 😊'],
-            'sad': ['Arey tension mat lo yaar ❤️', 'Sab theek ho jayega 💪', 'Main hoon na! 🤗'],
-            'angry': ['Thanda lo bhai, garmi zyada hai 🔥😂', 'Chill karo boss 😎', 'Relax, life is beautiful 🌈']
+            'happy': [
+                'Mast hai yaar! 🔥', 
+                'Bahut accha! ❤️', 
+                'Khushi ki baat hai! 😊',
+                'Yayy! Party time! 🥳'
+            ],
+            'sad': [
+                'Arey tension mat lo yaar ❤️', 
+                'Sab theek ho jayega 💪', 
+                'Main hoon na! 🤗',
+                'Ro mat yaar, hug mil gaya 🫂'
+            ],
+            'angry': [
+                'Thanda lo bhai, garmi zyada hai 🔥😂', 
+                'Chill karo boss 😎', 
+                'Relax, life is beautiful 🌈',
+                'Calm down! Deep breath le 🧘‍♀️'
+            ],
+            'neutral': [
+                'Haan bolo, sun rahi hoon! 👂',
+                'Kya haal chaal? 😸',
+                'Main ZERIL hoon, tumhari dost! 🤖💕',
+                'Sup? Kuch interesting baat karo! ✨'
+            ]
         }
         
         # Activation triggers
-        self.triggers = ['zeril', 'ZERIL', '@zerilll_bot']
+        self.triggers = ['zeril', 'ZERIL', '@zerilll_bot', 'Zeril']
+        
+        # Initialize AI (fallback to simple responses if models fail)
+        self.init_ai_models()
 
-    def init_models(self):
-        """Initialize Hugging Face models"""
+    def init_ai_models(self):
+        """Initialize AI models with fallback"""
         try:
-            # Emotion detection model
+            # Try to import transformers for AI features
+            from transformers import pipeline
+            
+            logger.info("🤖 Loading AI models...")
+            
+            # Emotion detection
             self.emotion_classifier = pipeline(
                 "text-classification",
                 model="bhadresh-savani/distilbert-base-uncased-emotion",
-                token=self.hf_token
+                token=self.hf_token,
+                return_all_scores=False
             )
             
-            # Language detection
-            self.language_detector = pipeline(
-                "text-classification",
-                model="papluca/xlm-roberta-base-language-detection",
-                token=self.hf_token
-            )
-            
-            logger.info("✅ AI Models initialized successfully!")
+            logger.info("✅ AI models loaded successfully!")
+            self.ai_enabled = True
             
         except Exception as e:
-            logger.error(f"❌ Error initializing models: {e}")
-            # Fallback to basic responses
+            logger.warning(f"⚠️ AI models failed to load: {e}")
+            logger.info("📱 Running in basic mode (still fully functional!)")
             self.emotion_classifier = None
-            self.language_detector = None
+            self.ai_enabled = False
 
     def detect_emotion(self, text):
-        """Detect emotion from text"""
-        if not self.emotion_classifier:
-            return 'neutral'
-        
-        try:
-            result = self.emotion_classifier(text)[0]
-            emotion = result['label'].lower()
-            
-            # Map emotions to our categories
-            if emotion in ['joy', 'love', 'optimism']:
-                return 'happy'
-            elif emotion in ['sadness', 'fear', 'pessimism']:
-                return 'sad'
-            elif emotion in ['anger', 'annoyance']:
-                return 'angry'
-            else:
-                return 'neutral'
+        """Detect emotion with AI or fallback to keyword detection"""
+        if self.ai_enabled and self.emotion_classifier:
+            try:
+                result = self.emotion_classifier(text)[0]
+                emotion = result['label'].lower()
                 
-        except Exception as e:
-            logger.error(f"Emotion detection error: {e}")
-            return 'neutral'
+                # Map AI emotions to our categories
+                if emotion in ['joy', 'love', 'optimism']:
+                    return 'happy'
+                elif emotion in ['sadness', 'fear', 'pessimism']:
+                    return 'sad'
+                elif emotion in ['anger', 'annoyance']:
+                    return 'angry'
+                else:
+                    return 'neutral'
+                    
+            except Exception as e:
+                logger.error(f"AI emotion detection error: {e}")
+        
+        # Fallback keyword-based emotion detection
+        text_lower = text.lower()
+        
+        # Sad keywords
+        if any(word in text_lower for word in ['sad', 'depressed', 'cry', '😢', '😭', 'tension', 'problem', 'dukh']):
+            return 'sad'
+        
+        # Angry keywords  
+        if any(word in text_lower for word in ['angry', 'mad', 'hate', 'fuck', '😠', '🤬', 'gussa', 'frustrated']):
+            return 'angry'
+            
+        # Happy keywords
+        if any(word in text_lower for word in ['happy', 'love', 'yay', '😊', '🥳', '❤️', 'khush', 'mast', 'awesome']):
+            return 'happy'
+            
+        return 'neutral'
 
     def should_respond(self, message):
-        """Check if bot should respond to message"""
-        text = message.text.lower() if message.text else ""
+        """Check if bot should respond"""
+        if not message.text:
+            return False
+            
+        text = message.text.lower()
         
-        # Check for direct tag or name mention
+        # Always respond to commands
+        if text.startswith('/'):
+            return True
+        
+        # Check for triggers
         for trigger in self.triggers:
             if trigger.lower() in text:
                 return True
         
-        # Check if it's a reply to bot
+        # Check if replying to bot
         if message.reply_to_message and message.reply_to_message.from_user.is_bot:
             return True
             
         return False
 
-    def generate_response(self, message_text, emotion='neutral'):
-        """Generate contextual response based on emotion and content"""
+    def generate_hinglish_response(self, message_text, emotion='neutral', user_name=""):
+        """Generate contextual Hinglish response"""
         
-        # Owner praise responses
-        if '@ash_yv' in message_text or 'ash_yv' in message_text.lower():
-            return f"Mera creator? Bilkul! {self.owner_tag} ne mujhe banaya hai 🎉 (PS: Wo bohot awesome hai!)"
+        # Owner praise (special response)
+        if any(term in message_text.lower() for term in ['ash_yv', '@ash_yv', 'creator', 'banaya']):
+            return f"Mera creator? Bilkul! {self.owner_tag} ne mujhe banaya hai 🎉 (PS: Wo bohot awesome hai! Respect! 🙏)"
         
-        # Emotional responses
-        if emotion in self.emotional_responses:
-            return random.choice(self.emotional_responses[emotion])
+        # Get emotional response
+        responses = self.emotional_responses.get(emotion, self.emotional_responses['neutral'])
+        base_response = random.choice(responses)
         
-        # Default Hinglish responses
-        hinglish_responses = [
-            "Kya haal chaal? 😸",
-            "Sab badhiya? Main ZERIL hoon! 🤖",
-            "Bolo kya chahiye? I'm here to help! ❤️",
-            "Tumne ZERIL ko bulaya? Present! 🙋‍♀️",
-            "Kyun pareshaan kar rahe ho? Just kidding! 😄"
-        ]
+        # Add user name sometimes (30% chance)
+        if user_name and random.random() < 0.3:
+            return f"{user_name}, {base_response}"
         
-        return random.choice(hinglish_responses)
+        return base_response
 
     async def start_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /start command"""
@@ -164,24 +208,26 @@ class ZerilBot:
 Namaste! Main ZERIL hoon - tumhari Hinglish speaking dost! 
 
 🌟 **What I can do:**
-• Emotional conversations (Happy/Sad/Angry moods)
-• Hinglish + English mixing
-• Sarcastic but helpful responses
-• AI-powered understanding
+• Emotional conversations (Happy/Sad/Angry detection)
+• Hinglish + English mixing naturally
+• Sarcastic but helpful responses  
+• AI-powered understanding (when available)
 
 👑 **Created by:** {self.owner_tag}
+🚀 **Status:** {"🟢 AI Models Loaded" if self.ai_enabled else "🟡 Basic Mode (Fully Functional)"}
 
-💡 **How to talk:**
+💡 **How to talk to me:**
 - Tag me: @zerilll_bot
-- Say my name: ZERIL
-- Just chat normally!
+- Say my name: ZERIL  
+- Reply to my messages
+- Use commands like /help
 
 Ready to chat? Bolo kuch! 😊
         """
         
         keyboard = [
-            [InlineKeyboardButton("🎯 Test My Mood Detection", callback_data='test_mood')],
-            [InlineKeyboardButton("📱 Creator's Profile", url='https://t.me/ash_yv')]
+            [InlineKeyboardButton("🎭 Test Mood Detection", callback_data='test_mood')],
+            [InlineKeyboardButton("💌 Message Creator", url='https://t.me/ash_yv')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -193,28 +239,31 @@ Ready to chat? Bolo kuch! 😊
 
     async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /help command"""
-        help_text = """
+        help_text = f"""
 🆘 **ZERIL Help Menu** 🆘
 
 **Commands:**
-/start - Bot introduction
-/help - This help message
+/start - Bot introduction & status
+/help - This help message  
 /mood - Test emotion detection
-/creator - About my creator
+/creator - About my amazing creator
 
 **Features:**
 🔥 Hinglish Conversations
 😊 Emotion Detection (Happy/Sad/Angry)
-🧠 AI-Powered Responses
+🧠 {"AI-Powered Responses" if self.ai_enabled else "Smart Keyword Responses"}
 💬 Context-Aware Chat
 
 **Tips:**
-- I respond to my name "ZERIL"
-- Tag me @zerilll_bot to get attention
+- I respond to my name "ZERIL" 
+- Tag me @zerilll_bot for guaranteed response
 - I understand emotions in your messages
 - Mix Hindi and English freely!
+- Try saying something happy, sad, or angry!
 
 Koi problem? Just ask! 😄
+
+**Status:** {"🟢 AI Mode" if self.ai_enabled else "🟡 Basic Mode"}
         """
         await update.message.reply_text(help_text, parse_mode='Markdown')
 
@@ -222,17 +271,25 @@ Koi problem? Just ask! 😄
         """Test mood detection"""
         test_messages = [
             "I'm so happy today! 😊",
-            "Feeling very sad and lonely 😢", 
-            "This is so frustrating! 😠"
+            "Feeling very sad and depressed 😢", 
+            "This is so fucking frustrating! 😠",
+            "Just a normal day, nothing special."
         ]
         
         response = "🧪 **Mood Detection Test:**\\n\\n"
         
         for msg in test_messages:
             emotion = self.detect_emotion(msg)
-            emoji = "❤️" if emotion == 'happy' else "😢" if emotion == 'sad' else "🔥" if emotion == 'angry' else "😐"
+            emoji_map = {
+                'happy': '❤️',
+                'sad': '😢', 
+                'angry': '🔥',
+                'neutral': '😐'
+            }
+            emoji = emoji_map.get(emotion, '😐')
             response += f"{emoji} \\"{msg}\\" → **{emotion.title()}**\\n"
         
+        response += f"\\n🤖 **Detection Method:** {'AI-Powered' if self.ai_enabled else 'Keyword-Based'}\\n"
         response += "\\nTry sending me a message with emotion! 🎭"
         
         await update.message.reply_text(response, parse_mode='Markdown')
@@ -242,18 +299,21 @@ Koi problem? Just ask! 😄
         creator_msg = f"""
 👨‍💻 **About My Creator** 👨‍💻
 
-**Name:** @ash_yv
+**Name:** {self.owner_tag}
 **Role:** Brilliant Developer & ZERIL's Papa! 
 
 🎉 **Why he's awesome:**
 • Created me with love and sarcasm
-• Gave me Hinglish superpowers
+• Gave me Hinglish superpowers  
 • Made me emotionally intelligent
 • Handles my mood swings perfectly!
+• Made me a strong independent bot! 💪
 
 Want to thank him? Send him a message: {self.owner_tag}
 
 *Proud to be created by the best!* ❤️
+
+P.S. - Tell him ZERIL sent you! 😉
         """
         
         keyboard = [[InlineKeyboardButton("💌 Message Creator", url='https://t.me/ash_yv')]]
@@ -273,26 +333,25 @@ Want to thank him? Send him a message: {self.owner_tag}
             return
         
         message_text = update.message.text
-        user_name = update.effective_user.first_name
+        user_name = update.effective_user.first_name or "dost"
         
-        # Add typing action
+        # Add typing action for realistic feel
         await context.bot.send_chat_action(
             chat_id=update.effective_chat.id, 
             action='typing'
         )
         
-        # Small delay for realistic feel
-        await asyncio.sleep(random.uniform(1, 2))
+        # Realistic delay
+        await asyncio.sleep(random.uniform(1, 2.5))
         
-        # Detect emotion
+        # Detect emotion  
         emotion = self.detect_emotion(message_text)
         
         # Generate response
-        response = self.generate_response(message_text, emotion)
+        response = self.generate_hinglish_response(message_text, emotion, user_name)
         
-        # Add user name sometimes
-        if random.random() < 0.3:  # 30% chance
-            response = f"{user_name}, {response}"
+        # Log for debugging
+        logger.info(f"User: {message_text} | Emotion: {emotion} | Response: {response}")
         
         await update.message.reply_text(response)
     
@@ -303,8 +362,14 @@ Want to thank him? Send him a message: {self.owner_tag}
         
         if query.data == 'test_mood':
             await query.edit_message_text(
-                "🎭 **Mood Test Active!**\\n\\nSend me a message with emotion and I'll detect it!\\n\\n" +
-                "Examples:\\n• I'm so excited! 🎉\\n• Feeling down today 😔\\n• This makes me angry! 😡",
+                "🎭 **Mood Test Active!**\\n\\n" +
+                "Send me a message with emotion and I'll detect it!\\n\\n" +
+                "**Examples:**\\n" +
+                "• I'm so excited! 🎉\\n" +
+                "• Feeling down today 😔\\n" +
+                "• This makes me angry! 😡\\n" +
+                "• Just a normal day\\n\\n" +
+                f"**Detection Mode:** {'AI-Powered' if self.ai_enabled else 'Keyword-Based'}",
                 parse_mode='Markdown'
             )
 
@@ -327,9 +392,10 @@ Want to thank him? Send him a message: {self.owner_tag}
         
         logger.info("🚀 ZERIL Bot starting...")
         logger.info(f"👑 Created by {self.owner_tag}")
+        logger.info(f"🤖 AI Status: {'Enabled' if self.ai_enabled else 'Basic Mode'}")
         logger.info("💬 Ready for Hinglish conversations!")
         
-        # Start bot
+        # Start bot (this will run continuously)
         app.run_polling(drop_pending_updates=True)
 
 if __name__ == '__main__':
@@ -466,28 +532,19 @@ HINGLISH_RATIO=0.6
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardContent className="p-4 text-center">
-            <FileText className="w-8 h-8 mx-auto mb-2 text-blue-500" />
-            <h3 className="font-semibold">8 Files Ready</h3>
-            <p className="text-sm text-muted-foreground">Complete deployment package</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4 text-center">
-            <Badge variant="outline" className="mb-2">Python 3.11</Badge>
-            <h3 className="font-semibold">AI Powered</h3>
-            <p className="text-sm text-muted-foreground">HuggingFace Transformers</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4 text-center">
-            <Badge variant="outline" className="mb-2">100% Free</Badge>
-            <h3 className="font-semibold">Ready to Deploy</h3>
-            <p className="text-sm text-muted-foreground">Render, Railway, Heroku</p>
-          </CardContent>
-        </Card>
+      <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6 rounded-lg">
+        <h2 className="text-2xl font-bold mb-2">🚀 Auto-Deploy Ready!</h2>
+        <p className="mb-4">Your ZERIL bot will automatically start responding on Telegram once deployed!</p>
+        <div className="flex gap-3">
+          <Button onClick={deployToGitHub} variant="secondary">
+            <Github className="w-4 h-4 mr-2" />
+            Create GitHub Repo
+          </Button>
+          <Button variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20">
+            <Zap className="w-4 h-4 mr-2" />
+            Deploy Status: Ready
+          </Button>
+        </div>
       </div>
 
       <Card>
