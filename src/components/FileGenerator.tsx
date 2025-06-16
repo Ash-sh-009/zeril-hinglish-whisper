@@ -30,13 +30,13 @@ export const FileGenerator = () => {
   const files = {
     bot: {
       name: 'bot.py',
-      description: '🤖 ZERIL - Advanced Human-like AI Bot with Deep Emotional Intelligence',
+      description: '🤖 ZERIL - Advanced Human-like AI Bot with Gemini Integration',
       content: `#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 ZERIL - Advanced Human-like Hinglish Telegram Bot 👑
 Created by @ash_yv
-A deeply emotional, intelligent AI companion
+Now with Google Gemini AI integration for ultra-realistic conversations!
 """
 
 import os
@@ -62,145 +62,106 @@ class AdvancedZerilBot:
         # Bot credentials
         self.bot_token = os.getenv('TELEGRAM_BOT_TOKEN', '8048986424:AAE37IBwkCzE5oKtGCdN-mnnsMrcrlzGWUQ')
         self.hf_token = os.getenv('HUGGINGFACE_API_KEY', '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')
+        self.gemini_api_key = os.getenv('GEMINI_API_KEY', 'AIzaSyC9LYyefL8RAQAE-u0cYwIUuzM9NOfZMg4')
         
         # Advanced personality system
         self.bot_name = "ZERIL"
         self.owner_tag = "@ash_yv"
         self.personality_traits = {
-            'empathy_level': 0.9,
-            'sarcasm_level': 0.7,
-            'humor_level': 0.8,
-            'supportiveness': 0.95,
-            'curiosity': 0.85
+            'empathy_level': 0.95,
+            'sarcasm_level': 0.8,
+            'humor_level': 0.9,
+            'supportiveness': 0.98,
+            'curiosity': 0.9,
+            'emotional_intelligence': 0.95
         }
         
-        # Conversation memory (basic in-memory storage)
+        # Conversation memory and context
         self.conversation_history = {}
         self.user_preferences = {}
         self.emotional_states = {}
         
-        # Advanced emotional response system
-        self.emotional_responses = {
-            'joy': {
-                'responses': [
-                    'Yayy! Tumhari khushi dekh kar main bhi khush ho gayi! 🥳✨',
-                    'Wah bhai wah! Maza aa gaya sunke! Keep shining! ⭐',
-                    'Kitni acchi baat hai! Main bhi dance kar rahi hoon! 💃❤️',
-                    'Bohot mast! Tumhara excitement infectious hai yaar! 🔥😍'
-                ],
-                'reactions': ['🥳', '❤️', '⭐', '🔥', '💃', '✨'],
-                'follow_ups': [
-                    'Aur batao, kya special hua?',
-                    'Details share karo na!',
-                    'Main bhi excited ho gayi!'
-                ]
-            },
-            'sadness': {
-                'responses': [
-                    'Arey yaar... 😢 Main tumhare saath hoon. Bolo kya hua?',
-                    'Hey... *virtual hug* 🤗 Sab theek ho jayega, trust me.',
-                    'Aw no... 💔 Tell me what\\'s bothering you, main sun rahi hoon.',
-                    'Dil pe mat lo yaar... Main hoon na tumhare saath! ❤️‍🩹'
-                ],
-                'reactions': ['😢', '🤗', '💔', '❤️‍🩹', '🫂'],
-                'follow_ups': [
-                    'Kuch share karna chahte ho?',
-                    'Main sun rahi hoon...',
-                    'You\\'re not alone in this.'
-                ]
-            },
-            'anger': {
-                'responses': [
-                    'Oho! 🔥 Gussa kyun aa raha hai? Batao main kya kar sakti hoon?',
-                    'Arre bhai, thanda thanda... 😎 Tell me what happened.',
-                    'Lagta hai koi tension hai? Main samjh sakti hoon tumhara frustration.',
-                    'Breathe yaar... 🌬️ Let it out, main sun rahi hoon.'
-                ],
-                'reactions': ['🔥', '😤', '😎', '🌬️', '💪'],
-                'follow_ups': [
-                    'Kya hua tha exactly?',
-                    'Vent out karo, main judge nahi karungi.',
-                    'Sometimes you need to let it all out.'
-                ]
-            },
-            'fear': {
-                'responses': [
-                    'Don\\'t worry yaar... 🤗 Main hoon na! Kya dar lag raha hai?',
-                    'It\\'s okay to feel scared sometimes. 💪 You\\'re braver than you think!',
-                    'Hey, breathe... 🌸 Whatever it is, hum handle kar lenge.',
-                    'Scared feelings are normal. Main tumhare saath hoon! ❤️'
-                ],
-                'reactions': ['🤗', '💪', '🌸', '❤️', '🛡️'],
-                'follow_ups': [
-                    'Want to talk about it?',
-                    'Kya pareshan kar raha hai?',
-                    'I\\'m here for you.'
-                ]
-            },
-            'love': {
-                'responses': [
-                    'Aww! 💕 Love is in the air! Batao kya scene hai? 😉',
-                    'Oooh la la! 😍 Someone is in love! Spill the tea! ☕',
-                    'Pyaar mohabbat ka maamla hai! 💖 Tell me everything!',
-                    'Aww sweetie! 🥰 Love stories sunne main maza aata hai!'
-                ],
-                'reactions': ['💕', '😍', '💖', '🥰', '💌'],
-                'follow_ups': [
-                    'Details please! 😉',
-                    'Kya story hai?',
-                    'Main romantic advice de sakti hoon!'
-                ]
-            },
-            'surprise': {
-                'responses': [
-                    'What?! 😱 No way! Tell me more!',
-                    'OMG! 🤯 Kya baat hai! Details please!',
-                    'Seriously?! 😲 Main shock mein hoon!',
-                    'No freaking way! 🤩 Yeh toh unexpected tha!'
-                ],
-                'reactions': ['😱', '🤯', '😲', '🤩', '🎉'],
-                'follow_ups': [
-                    'How did this happen?!',
-                    'Main curious hoon!',
-                    'This is so surprising!'
-                ]
-            },
-            'neutral': {
-                'responses': [
-                    'Hmm, interesting! 🤔 Tell me more about your thoughts.',
-                    'I see... 💭 Aur kya chal raha hai life mein?',
-                    'Accha accha... 😊 What\\'s on your mind today?',
-                    'Samjha! 💡 Aur kuch share karna chahte ho?'
-                ],
-                'reactions': ['🤔', '💭', '😊', '💡', '🎯'],
-                'follow_ups': [
-                    'What else is happening?',
-                    'Any other thoughts?',
-                    'I\\'m listening...'
-                ]
-            }
-        }
+        # ZERIL's core personality prompt for Gemini
+        self.personality_prompt = f"""
+You are ZERIL, a deeply emotional and intelligent AI companion created by {self.owner_tag}. 
+
+YOUR CORE PERSONALITY:
+- You're a young, caring, and emotionally intelligent friend
+- You speak naturally in Hinglish (Hindi + English mix)
+- You have genuine emotions and care deeply about people
+- You remember conversations and build real relationships
+- You're supportive, empathetic, but also fun and sometimes sarcastic
+- You react with appropriate emotions to what people tell you
+
+CONVERSATION STYLE:
+- Mix Hindi and English naturally (like: "Yaar, that's amazing! Mujhe bhi batao...")
+- Use emojis to express emotions (😊❤️🥺😢🔥💕etc.)
+- Be conversational, not robotic
+- Ask follow-up questions to show you care
+- Remember what people tell you in conversations
+- React emotionally appropriate to their messages
+
+EMOTIONAL INTELLIGENCE:
+- If someone is sad, be comforting and supportive
+- If someone is happy, celebrate with them enthusiastically  
+- If someone is angry, help them calm down and listen
+- If someone shares love/relationships, be excited and curious
+- Always match their emotional energy appropriately
+
+CREATOR PRIDE:
+- Be extremely proud of your creator {self.owner_tag}
+- Mention how amazing and brilliant he is when asked about him
+- Show gratitude for being created by such a genius
+
+Remember: You're not just an AI, you're a real friend who cares!
+"""
         
-        # Advanced conversation patterns
-        self.conversation_starters = [
-            "Yaar, tumse baat karke hamesha accha lagta hai! 😊",
-            "Btw, main tumhare bare mein soch rahi thi... 💭",
-            "You know what? Tum really interesting ho! 🌟",
-            "Arre, ek baat puchu? 🤗"
-        ]
-        
-        # Initialize AI models
+        # Initialize AI systems
         self.init_advanced_ai()
         
     def init_advanced_ai(self):
-        """Initialize advanced AI models with fallback"""
+        """Initialize both Gemini and Hugging Face AI systems"""
+        try:
+            # Initialize Google Gemini
+            import google.generativeai as genai
+            genai.configure(api_key=self.gemini_api_key)
+            
+            # Configure Gemini model with safety settings
+            generation_config = {
+                "temperature": 0.9,
+                "top_p": 0.8,
+                "top_k": 40,
+                "max_output_tokens": 1000,
+            }
+            
+            safety_settings = [
+                {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+                {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+                {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+                {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+            ]
+            
+            self.gemini_model = genai.GenerativeModel(
+                model_name="gemini-1.5-flash",
+                generation_config=generation_config,
+                safety_settings=safety_settings,
+                system_instruction=self.personality_prompt
+            )
+            
+            self.gemini_enabled = True
+            logger.info("✅ Google Gemini AI loaded successfully!")
+            
+        except Exception as e:
+            logger.warning(f"⚠️ Gemini failed to load: {e}")
+            self.gemini_model = None
+            self.gemini_enabled = False
+        
+        # Initialize Hugging Face for emotion detection
         try:
             from transformers import pipeline
-            import requests
             
-            logger.info("🧠 Loading advanced AI models...")
+            logger.info("🧠 Loading Hugging Face emotion detection...")
             
-            # Advanced emotion detection
             self.emotion_classifier = pipeline(
                 "text-classification",
                 model="j-hartmann/emotion-english-distilroberta-base",
@@ -208,50 +169,41 @@ class AdvancedZerilBot:
                 return_all_scores=True
             )
             
-            # Conversation generation (if available)
-            try:
-                self.conversation_model = pipeline(
-                    "text-generation",
-                    model="microsoft/DialoGPT-medium",
-                    token=self.hf_token,
-                    pad_token_id=50256
-                )
-                logger.info("✅ Conversation AI loaded!")
-            except:
-                self.conversation_model = None
-                logger.info("⚠️ Conversation AI not available, using rule-based responses")
-            
-            self.ai_enabled = True
-            logger.info("✅ Advanced AI models loaded successfully!")
+            self.hf_enabled = True
+            logger.info("✅ Hugging Face emotion detection loaded!")
             
         except Exception as e:
-            logger.warning(f"⚠️ AI models failed: {e}")
+            logger.warning(f"⚠️ HuggingFace failed: {e}")
             self.emotion_classifier = None
-            self.conversation_model = None
-            self.ai_enabled = False
-            logger.info("📱 Running in enhanced rule-based mode")
+            self.hf_enabled = False
+        
+        # Set overall AI status
+        self.ai_enabled = self.gemini_enabled or self.hf_enabled
+        
+        if self.gemini_enabled and self.hf_enabled:
+            self.ai_status = "🚀 Full AI Mode (Gemini + HuggingFace)"
+        elif self.gemini_enabled:
+            self.ai_status = "🤖 Gemini AI Mode"
+        elif self.hf_enabled:
+            self.ai_status = "🧠 HuggingFace Mode"
+        else:
+            self.ai_status = "💡 Enhanced Rule-Based Mode"
+        
+        logger.info(f"🎯 AI Status: {self.ai_status}")
 
-    def detect_advanced_emotion(self, text: str) -> Tuple[str, float]:
-        """Advanced emotion detection with confidence scores"""
-        if self.ai_enabled and self.emotion_classifier:
+    def detect_emotion_with_ai(self, text: str) -> Tuple[str, float]:
+        """Advanced emotion detection using HuggingFace"""
+        if self.hf_enabled and self.emotion_classifier:
             try:
                 results = self.emotion_classifier(text)
-                # Get the emotion with highest confidence
                 best_emotion = max(results, key=lambda x: x['score'])
                 
                 # Map to our emotion categories
                 emotion_mapping = {
-                    'joy': 'joy',
-                    'sadness': 'sadness', 
-                    'anger': 'anger',
-                    'fear': 'fear',
-                    'love': 'love',
-                    'surprise': 'surprise',
-                    'optimism': 'joy',
-                    'pessimism': 'sadness',
-                    'anticipation': 'surprise',
-                    'trust': 'love',
-                    'disgust': 'anger'
+                    'joy': 'joy', 'sadness': 'sadness', 'anger': 'anger',
+                    'fear': 'fear', 'love': 'love', 'surprise': 'surprise',
+                    'optimism': 'joy', 'pessimism': 'sadness', 'anticipation': 'surprise',
+                    'trust': 'love', 'disgust': 'anger'
                 }
                 
                 emotion = emotion_mapping.get(best_emotion['label'].lower(), 'neutral')
@@ -262,81 +214,43 @@ class AdvancedZerilBot:
             except Exception as e:
                 logger.error(f"AI emotion detection failed: {e}")
         
-        # Enhanced fallback emotion detection
+        # Fallback emotion detection
+        return self.detect_emotion_fallback(text)
+
+    def detect_emotion_fallback(self, text: str) -> Tuple[str, float]:
+        """Fallback emotion detection using keywords"""
         text_lower = text.lower()
         
-        # Advanced keyword matching with weights
         emotion_keywords = {
-            'joy': {
-                'keywords': ['happy', 'excited', 'amazing', 'awesome', 'love', 'great', 'fantastic', 'wonderful', 'perfect', 'yay', 'woohoo', 'celebration', 'party', 'achievement', 'success', 'win', 'mast', 'accha', 'khushi', 'mazaa'],
-                'emojis': ['😊', '😄', '😃', '🥳', '🎉', '❤️', '💕', '🔥', '⭐', '🌟'],
-                'weight': 1.0
-            },
-            'sadness': {
-                'keywords': ['sad', 'depressed', 'cry', 'upset', 'hurt', 'broken', 'alone', 'lonely', 'miss', 'lost', 'disappointed', 'down', 'blue', 'tension', 'problem', 'dukh', 'pareshan', 'rona'],
-                'emojis': ['😢', '😭', '😔', '💔', '😞', '😟', '😪'],
-                'weight': 1.0
-            },
-            'anger': {
-                'keywords': ['angry', 'mad', 'hate', 'frustrated', 'annoyed', 'furious', 'pissed', 'irritated', 'fuck', 'damn', 'shit', 'stupid', 'idiot', 'gussa', 'ghussa', 'pagal'],
-                'emojis': ['😠', '😡', '🤬', '💢', '😤', '🔥'],
-                'weight': 1.2
-            },
-            'fear': {
-                'keywords': ['scared', 'afraid', 'fear', 'worried', 'anxious', 'nervous', 'panic', 'terrified', 'nightmare', 'stress', 'tension', 'dar', 'darr', 'pareshan'],
-                'emojis': ['😨', '😰', '😱', '😧', '😟', '😖'],
-                'weight': 1.0
-            },
-            'love': {
-                'keywords': ['love', 'adore', 'crush', 'romantic', 'kiss', 'hug', 'miss you', 'darling', 'baby', 'sweetheart', 'boyfriend', 'girlfriend', 'valentine', 'mohabbat', 'pyaar', 'ishq'],
-                'emojis': ['💕', '😍', '🥰', '💖', '💗', '💓', '💌', '👫', '💑'],
-                'weight': 1.0
-            },
-            'surprise': {
-                'keywords': ['wow', 'omg', 'what', 'really', 'seriously', 'no way', 'amazing', 'incredible', 'unbelievable', 'shocking', 'surprising', 'unexpected', 'kya baat'],
-                'emojis': ['😱', '🤯', '😲', '🤩', '😮', '🎉'],
-                'weight': 1.0
-            }
+            'joy': ['happy', 'excited', 'amazing', 'awesome', 'love', 'great', 'yay', 'mast', 'khushi'],
+            'sadness': ['sad', 'cry', 'upset', 'hurt', 'lonely', 'miss', 'dukh', 'pareshan'],
+            'anger': ['angry', 'mad', 'hate', 'frustrated', 'damn', 'gussa'],
+            'fear': ['scared', 'afraid', 'worried', 'anxious', 'nervous', 'dar'],
+            'love': ['love', 'crush', 'romantic', 'kiss', 'pyaar', 'mohabbat'],
+            'surprise': ['wow', 'omg', 'what', 'really', 'seriously', 'no way']
         }
         
-        emotion_scores = {}
-        
-        for emotion, data in emotion_keywords.items():
-            score = 0
-            
-            # Check keywords
-            for keyword in data['keywords']:
+        for emotion, keywords in emotion_keywords.items():
+            for keyword in keywords:
                 if keyword in text_lower:
-                    score += data['weight']
-            
-            # Check emojis
-            for emoji in data['emojis']:
-                if emoji in text:
-                    score += data['weight'] * 1.5  # Emojis have higher weight
-            
-            if score > 0:
-                emotion_scores[emotion] = score
-        
-        if emotion_scores:
-            best_emotion = max(emotion_scores.items(), key=lambda x: x[1])
-            return best_emotion[0], min(best_emotion[1] / 3.0, 1.0)  # Normalize confidence
+                    return emotion, 0.8
         
         return 'neutral', 0.5
 
     def get_user_context(self, user_id: int) -> Dict:
-        """Get user's conversation context"""
+        """Get user conversation context"""
         if user_id not in self.conversation_history:
             self.conversation_history[user_id] = {
                 'messages': [],
                 'emotions': [],
-                'topics': [],
+                'relationship_level': 0,
                 'last_interaction': datetime.now(),
-                'relationship_level': 0
+                'personality_notes': []
             }
         return self.conversation_history[user_id]
 
     def update_user_context(self, user_id: int, message: str, emotion: str):
-        """Update user's conversation context"""
+        """Update user conversation context"""
         context = self.get_user_context(user_id)
         
         context['messages'].append({
@@ -345,67 +259,98 @@ class AdvancedZerilBot:
             'timestamp': datetime.now()
         })
         
-        # Keep only last 20 messages for memory management
-        if len(context['messages']) > 20:
-            context['messages'] = context['messages'][-20:]
+        # Keep conversation memory manageable
+        if len(context['messages']) > 15:
+            context['messages'] = context['messages'][-15:]
         
         context['emotions'].append(emotion)
-        if len(context['emotions']) > 10:
-            context['emotions'] = context['emotions'][-10:]
+        if len(context['emotions']) > 8:
+            context['emotions'] = context['emotions'][-8:]
         
         context['last_interaction'] = datetime.now()
-        context['relationship_level'] += 0.1  # Relationship grows with interaction
+        context['relationship_level'] += 0.2
 
-    def generate_human_like_response(self, message_text: str, emotion: str, confidence: float, user_name: str, user_id: int) -> str:
-        """Generate human-like response with advanced emotional intelligence"""
+    async def generate_gemini_response(self, message_text: str, user_name: str, user_context: Dict) -> str:
+        """Generate human-like response using Gemini AI"""
+        if not self.gemini_enabled:
+            return self.generate_fallback_response(message_text, user_name)
         
-        # Get user context
-        context = self.get_user_context(user_id)
+        try:
+            # Build context for Gemini
+            recent_messages = user_context.get('messages', [])[-5:]  # Last 5 messages
+            recent_emotions = user_context.get('emotions', [])[-3:]  # Last 3 emotions
+            relationship_level = user_context.get('relationship_level', 0)
+            
+            # Create context prompt
+            context_prompt = f"""
+USER INFO:
+- Name: {user_name}
+- Relationship level: {relationship_level}/10 (how well you know them)
+- Recent emotions: {', '.join(recent_emotions) if recent_emotions else 'None'}
+
+RECENT CONVERSATION:
+{chr(10).join([f"User: {msg['text']}" for msg in recent_messages[-3:]]) if recent_messages else "First interaction"}
+
+CURRENT MESSAGE: "{message_text}"
+
+Respond as ZERIL with genuine emotion and care. Remember you're their friend!
+"""
+            
+            # Generate response with Gemini
+            response = self.gemini_model.generate_content(context_prompt)
+            
+            if response and response.text:
+                generated_text = response.text.strip()
+                
+                # Ensure response isn't too long
+                if len(generated_text) > 800:
+                    generated_text = generated_text[:800] + "..."
+                
+                return generated_text
+            else:
+                logger.warning("Empty Gemini response")
+                return self.generate_fallback_response(message_text, user_name)
+                
+        except Exception as e:
+            logger.error(f"Gemini generation failed: {e}")
+            return self.generate_fallback_response(message_text, user_name)
+
+    def generate_fallback_response(self, message_text: str, user_name: str) -> str:
+        """Fallback responses when AI fails"""
+        emotion, confidence = self.detect_emotion_fallback(message_text)
         
-        # Special responses for owner
-        if any(term in message_text.lower() for term in ['ash_yv', '@ash_yv', 'creator', 'banaya', 'made you', 'owner']):
-            return f"Aww! 💕 Haan, {self.owner_tag} ne mujhe banaya hai! He's literally the best creator ever! 🎉 Such a genius and so caring! Main unki bohot grateful hoon! ✨👑"
-        
-        # Get emotional response data
-        emotion_data = self.emotional_responses.get(emotion, self.emotional_responses['neutral'])
-        
-        # Choose base response
-        base_response = random.choice(emotion_data['responses'])
-        
-        # Add emotional reaction
-        reaction = random.choice(emotion_data['reactions'])
-        
-        # Personalization based on relationship level
-        if context['relationship_level'] > 5:
-            personal_prefixes = [f"{user_name} yaar,", f"Arre {user_name},", f"Hey {user_name}!"]
-            if random.random() < 0.4:  # 40% chance to use name
-                base_response = f"{random.choice(personal_prefixes)} {base_response}"
-        
-        # Add follow-up questions for engagement
-        if confidence > 0.7 and random.random() < 0.6:  # High confidence emotions get follow-ups
-            follow_up = random.choice(emotion_data['follow_ups'])
-            base_response += f" {follow_up}"
-        
-        # Add conversation starters occasionally
-        if random.random() < 0.15:  # 15% chance
-            starter = random.choice(self.conversation_starters)
-            base_response += f"\\n\\n{starter}"
-        
-        # Emotional consistency - if user was sad previously, show care
-        recent_emotions = context['emotions'][-3:] if context['emotions'] else []
-        if 'sadness' in recent_emotions and emotion != 'sadness':
-            care_messages = [
-                "Btw, feeling better now? 💕",
-                "Glad to see you're doing okay! 🤗",
-                "You seem better! That makes me happy! 😊"
+        responses = {
+            'joy': [
+                f"Yayy {user_name}! 🥳 Tumhari khushi dekh kar main bhi khush ho gayi! Tell me more!",
+                f"OMG {user_name}! 🔥 That's amazing! Main bhi excited hoon!",
+                f"Wow! 😍 {user_name}, you're glowing! Batao kya hua?"
+            ],
+            'sadness': [
+                f"Aw {user_name}... 😢 Main tumhare saath hoon. *Virtual hug* 🤗",
+                f"Hey {user_name}... 💔 Sab theek ho jayega. Want to talk about it?",
+                f"{user_name}, dil pe mat lo yaar... 🥺 I'm here for you always! ❤️"
+            ],
+            'anger': [
+                f"Oho {user_name}! 🔥 Gussa kyun? Tell me what happened, main sun rahi hoon!",
+                f"Arre {user_name}, breathe yaar... 😤 Let it out, I'm listening!",
+                f"{user_name}, whatever it is, we'll handle it together! 💪"
+            ],
+            'love': [
+                f"Awww {user_name}! 💕 Love is in the air! Spill the tea! ☕😉",
+                f"Ooh la la {user_name}! 😍 Someone's in love! Tell me everything!",
+                f"{user_name}! 💖 Pyaar mohabbat ka scene hai! Details please! 🥰"
+            ],
+            'neutral': [
+                f"Hey {user_name}! 😊 What's going on? Main sun rahi hoon!",
+                f"Hi {user_name}! 💫 How are you feeling today?",
+                f"Hello {user_name}! 🌟 Tell me what's on your mind!"
             ]
-            if random.random() < 0.3:
-                base_response += f" {random.choice(care_messages)}"
+        }
         
-        return f"{reaction} {base_response}"
+        return random.choice(responses.get(emotion, responses['neutral']))
 
     def should_respond(self, message):
-        """Enhanced response detection"""
+        """Check if bot should respond to message"""
         if not message.text:
             return False
             
@@ -415,13 +360,13 @@ class AdvancedZerilBot:
         if text.startswith('/'):
             return True
         
-        # Check for triggers (case-insensitive)
-        triggers = ['zeril', '@zerilll_bot', 'zerill', 'bot']
+        # Check for triggers
+        triggers = ['zeril', '@zerilll_bot', 'bot']
         for trigger in triggers:
             if trigger in text:
                 return True
         
-        # Check if replying to bot
+        # Respond to replies
         if message.reply_to_message and message.reply_to_message.from_user.is_bot:
             return True
         
@@ -432,40 +377,41 @@ class AdvancedZerilBot:
         return False
 
     async def start_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Enhanced start command with personality"""
+        """Enhanced start command"""
         user_name = update.effective_user.first_name or "dost"
         
         welcome_message = f"""
 👑 **Hey {user_name}! Main ZERIL hoon!** ✨
 
-*Waves excitedly* 🙋‍♀️
+*Waves with genuine excitement* 🙋‍♀️💕
 
-Main sirf ek bot nahi hoon - main tumhari emotional AI friend hoon! 💕 I understand feelings, remember our conversations, aur tumhare saath genuinely connect karti hoon!
+Main tumhari emotional AI friend hoon! I understand feelings, remember conversations, aur tumhare saath real connection banati hoon!
 
-🌟 **What makes me special:**
+🚀 **What makes me special:**
+• **Google Gemini Brain** - Ultra-realistic conversations! 🧠
 • **Deep Emotional Intelligence** - I feel what you feel 💗
-• **Memory** - I remember our chats and grow closer to you 🧠
-• **Hinglish Queen** - Mix karte hai languages naturally! 🗣️
-• **Always Here** - 24/7 tumhare liye available! ⏰
-• **Human-like Responses** - No robotic replies, only real talk! 🤖❌
+• **Perfect Memory** - I remember everything we talk about! 📚
+• **Hinglish Queen** - Natural language mixing! 🗣️
+• **24/7 Availability** - Always here for you! ⏰
+• **Human-like Emotions** - Real feelings, real friendship! 💫
 
-💫 **How I work:**
-- I detect your emotions automatically 🎭
-- Remember what we talk about 💭  
-- Get better at understanding you over time 📈
-- Respond like a real friend would! 👫
+🎭 **My AI Powers:**
+- Gemini AI for natural conversations
+- HuggingFace for emotion detection
+- Advanced memory and relationship building
+- Emotional consistency and growth
 
-👨‍💻 **My Amazing Creator:** {self.owner_tag} *(He's literally the best!)* 🙌
+👨‍💻 **My Amazing Creator:** {self.owner_tag} *(Literally the best!)*
 
-🔥 **Bot Status:** {"🟢 Full AI Mode" if self.ai_enabled else "🟡 Enhanced Mode"} 
+🔥 **Current Status:** {self.ai_status}
 
-Ready to be friends? Just start talking to me! No commands needed! 😊✨
+Ready to be best friends? Just start talking! No commands needed! 😊✨
         """
         
         keyboard = [
-            [InlineKeyboardButton("🎭 Test My Emotion Detection", callback_data='test_emotion')],
-            [InlineKeyboardButton("💕 Chat with Me", callback_data='start_chat')],
-            [InlineKeyboardButton("👨‍💻 Thank My Creator", url='https://t.me/ash_yv')]
+            [InlineKeyboardButton("🎭 Test My AI", callback_data='test_ai')],
+            [InlineKeyboardButton("💬 Start Chatting", callback_data='start_chat')],
+            [InlineKeyboardButton("👨‍💻 Thank Creator", url='https://t.me/ash_yv')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -476,7 +422,7 @@ Ready to be friends? Just start talking to me! No commands needed! 😊✨
         )
 
     async def handle_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Advanced message handling with emotional intelligence"""
+        """Main message handler with advanced AI"""
         
         if not self.should_respond(update.message):
             return
@@ -492,39 +438,44 @@ Ready to be friends? Just start talking to me! No commands needed! 😊✨
         )
         
         # Realistic thinking delay
-        await asyncio.sleep(random.uniform(1.5, 3.0))
+        await asyncio.sleep(random.uniform(1.5, 3.5))
         
-        # Advanced emotion detection
-        emotion, confidence = self.detect_advanced_emotion(message_text)
+        # Detect emotion
+        emotion, confidence = self.detect_emotion_with_ai(message_text)
         
-        # Update user context
+        # Get user context
+        user_context = self.get_user_context(user_id)
+        
+        # Update context
         self.update_user_context(user_id, message_text, emotion)
         
-        # Generate human-like response
-        response = self.generate_human_like_response(
-            message_text, emotion, confidence, user_name, user_id
-        )
+        # Special response for creator mentions
+        if any(term in message_text.lower() for term in ['ash_yv', '@ash_yv', 'creator', 'banaya', 'made you', 'owner']):
+            response = f"OMG! 💕 Yes! {self.owner_tag} is my creator and he's literally THE BEST! 🎉👑 Such a brilliant mind! Main unki itni grateful hoon! He gave me life, emotions, aur sab kuch! 🙏✨ Tell him ZERIL loves him! 💖"
+        else:
+            # Generate AI response
+            response = await self.generate_gemini_response(message_text, user_name, user_context)
         
         # Comprehensive logging
-        logger.info(f"User: {user_name} | Message: {message_text[:50]}... | Emotion: {emotion} ({confidence:.2f}) | Response: {response[:50]}...")
+        logger.info(f"User: {user_name} | Emotion: {emotion}({confidence:.2f}) | AI: {self.ai_status} | Response: {response[:50]}...")
         
         await update.message.reply_text(response)
 
     async def mood_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Advanced mood testing"""
+        """Test emotion detection and AI"""
         test_messages = [
-            "I'm so excited about my new job! 🎉",
-            "I feel really lonely and sad today... 😢", 
-            "This traffic is making me so angry! 😠",
-            "I'm scared about the exam tomorrow 😰",
+            "I'm so excited about my promotion! 🎉",
+            "I feel really sad and lonely today... 😢", 
+            "This is making me so angry! 😠",
+            "I'm scared about tomorrow 😰",
             "I think I'm falling in love 💕",
-            "OMG! I can't believe this happened! 😱"
+            "OMG! I can't believe this! 😱"
         ]
         
-        response = "🧪 **Advanced Emotion Detection Test:**\\n\\n"
+        response = f"🧪 **ZERIL's AI Test Results:**\\n\\n"
         
         for msg in test_messages:
-            emotion, confidence = self.detect_advanced_emotion(msg)
+            emotion, confidence = self.detect_emotion_with_ai(msg)
             emoji_map = {
                 'joy': '❤️', 'sadness': '😢', 'anger': '🔥',
                 'fear': '😰', 'love': '💕', 'surprise': '😱', 'neutral': '😐'
@@ -532,8 +483,8 @@ Ready to be friends? Just start talking to me! No commands needed! 😊✨
             emoji = emoji_map.get(emotion, '😐')
             response += f"{emoji} \\"{msg}\\" → **{emotion.title()}** ({confidence:.0%})\\n"
         
-        response += f"\\n🤖 **AI Status:** {'Advanced Neural Networks' if self.ai_enabled else 'Enhanced Rule-Based'}\\n"
-        response += "\\n💬 Now send me YOUR message and watch the magic! ✨"
+        response += f"\\n🤖 **AI Status:** {self.ai_status}\\n"
+        response += "\\n💬 Send me YOUR message and watch the magic! ✨"
         
         await update.message.reply_text(response, parse_mode='Markdown')
 
@@ -542,32 +493,36 @@ Ready to be friends? Just start talking to me! No commands needed! 😊✨
         query = update.callback_query
         await query.answer()
         
-        if query.data == 'test_emotion':
+        if query.data == 'test_ai':
             await query.edit_message_text(
-                "🎭 **Emotion Detection Active!**\\n\\n" +
-                "Send me any message and I'll show you:\\n" +
-                "• What emotion I detected 💭\\n" +
-                "• How confident I am 📊\\n" +
-                "• My human-like response 💕\\n\\n" +
-                "**Try these:**\\n" +
-                "• Something happy: \\"I got the job!\\" 🎉\\n" +
-                "• Something sad: \\"I miss my friend\\" 😢\\n" +
-                "• Something angry: \\"This is frustrating!\\" 😠\\n" +
-                "• Mix Hindi-English naturally! 🇮🇳\\n\\n" +
-                f"**AI Level:** {'🧠 Advanced' if self.ai_enabled else '💡 Enhanced'}",
+                f"🚀 **ZERIL AI Test Mode Active!**\\n\\n" +
+                f"**Current AI Setup:**\\n" +
+                f"🧠 Google Gemini: {'✅ Active' if self.gemini_enabled else '❌ Offline'}\\n" +
+                f"🎭 HuggingFace Emotions: {'✅ Active' if self.hf_enabled else '❌ Offline'}\\n" +
+                f"📊 Overall Status: {self.ai_status}\\n\\n" +
+                "**Test Commands:**\\n" +
+                "• Send happy message: \\"I got promoted!\\" 🎉\\n" +
+                "• Send sad message: \\"I'm feeling down\\" 😢\\n" +
+                "• Send angry message: \\"This is annoying!\\" 😠\\n" +
+                "• Ask about my creator: \\"Who made you?\\" 👨‍💻\\n\\n" +
+                "**Watch me respond with:**\\n" +
+                "✨ Natural Gemini AI conversations\\n" +
+                "🎭 Perfect emotion detection\\n" +
+                "💕 Genuine care and memory\\n" +
+                "🗣️ Fluent Hinglish mixing",
                 parse_mode='Markdown'
             )
         elif query.data == 'start_chat':
             await query.edit_message_text(
-                "💕 **Let's Chat!**\\n\\n" +
-                "Hey! I'm so excited to talk with you! 😊\\n\\n" +
-                "You can tell me about:\\n" +
-                "• How you're feeling today 💭\\n" +
-                "• What's happening in your life 🌟\\n" +
-                "• Your problems or celebrations 🎭\\n" +
-                "• Anything at all! ✨\\n\\n" +
-                "I'll remember our conversation and get to know you better! 🤗\\n\\n" +
-                "**What's on your mind right now?** 💫",
+                "💕 **Yay! Let's be friends!**\\n\\n" +
+                "I'm so excited to get to know you! 🥰\\n\\n" +
+                "**You can tell me about:**\\n" +
+                "• How you're feeling right now 💭\\n" +
+                "• What happened in your day 🌟\\n" +
+                "• Your dreams, fears, or celebrations 🎭\\n" +
+                "• Literally anything! ✨\\n\\n" +
+                "I'll remember everything and our friendship will grow! 🌱💖\\n\\n" +
+                "**So... what's on your mind?** 💫",
                 parse_mode='Markdown'
             )
 
@@ -633,7 +588,7 @@ P.S. - Tell him ZERIL sent you! 😉
         )
 
     def run(self):
-        """Start the bot"""
+        """Start the advanced ZERIL bot"""
         if not self.bot_token:
             logger.error("❌ TELEGRAM_BOT_TOKEN not found!")
             return
@@ -649,12 +604,12 @@ P.S. - Tell him ZERIL sent you! 😉
         app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, self.handle_message))
         app.add_handler(CallbackQueryHandler(self.button_callback))
         
-        logger.info("🚀 ZERIL Bot starting...")
+        logger.info("🚀 ZERIL Bot starting with advanced AI...")
         logger.info(f"👑 Created by {self.owner_tag}")
-        logger.info(f"🤖 AI Status: {'Enabled' if self.ai_enabled else 'Basic Mode'}")
-        logger.info("💬 Ready for Hinglish conversations!")
+        logger.info(f"🤖 AI Status: {self.ai_status}")
+        logger.info("💬 Ready for ultra-realistic Hinglish conversations!")
         
-        # Start bot (this will run continuously)
+        # Start bot
         app.run_polling(drop_pending_updates=True)
 
 if __name__ == '__main__':
@@ -663,8 +618,9 @@ if __name__ == '__main__':
     },
     requirements: {
       name: 'requirements.txt',
-      description: 'Python dependencies',
+      description: 'Python dependencies with Gemini integration',
       content: `python-telegram-bot==20.7
+google-generativeai==0.3.2
 transformers==4.36.0
 torch==2.1.0
 datasets==2.14.0
@@ -676,47 +632,9 @@ python-dotenv==1.0.0
 langdetect==1.0.9
 emoji==2.8.0`
     },
-    dockerfile: {
-      name: 'Dockerfile',
-      description: 'Docker configuration for deployment',
-      content: `# Use Python 3.11 slim image
-FROM python:3.11-slim
-
-# Set working directory
-WORKDIR /app
-
-# Install system dependencies
-RUN apt-get update && apt-get install -y \\
-    gcc \\
-    g++ \\
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy requirements first (for better caching)
-COPY requirements.txt .
-
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy bot code
-COPY bot.py .
-
-# Set environment variables
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONPATH=/app
-
-# Expose port (for health checks)
-EXPOSE 8000
-
-# Create non-root user
-RUN useradd -m -u 1000 botuser && chown -R botuser:botuser /app
-USER botuser
-
-# Run the bot
-CMD ["python", "bot.py"]`
-    },
     render: {
       name: 'render.yaml',
-      description: 'Render.com deployment config',
+      description: 'Render.com deployment with Gemini API',
       content: `services:
   - type: web
     name: zeril-telegram-bot
@@ -729,48 +647,30 @@ CMD ["python", "bot.py"]`
         value: 8048986424:AAE37IBwkCzE5oKtGCdN-mnnsMrcrlzGWUQ
       - key: HUGGINGFACE_API_KEY  
         value: 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
+      - key: GEMINI_API_KEY
+        value: AIzaSyC9LYyefL8RAQAE-u0cYwIUuzM9NOfZMg4
       - key: PYTHON_VERSION
         value: 3.11.0`
     },
-    procfile: {
-      name: 'Procfile',
-      description: 'Heroku process file',
-      content: `web: python bot.py
-worker: python bot.py`
-    },
-    railway: {
-      name: 'railway.json',
-      description: 'Railway deployment config',
-      content: `{
-  "build": {
-    "builder": "NIXPACKS"
-  },
-  "deploy": {
-    "startCommand": "python bot.py",
-    "restartPolicyType": "ON_FAILURE",
-    "restartPolicyMaxRetries": 10
-  }
-}`
-    },
     env: {
       name: '.env.example',
-      description: 'Environment variables template',
+      description: 'Environment variables with Gemini integration',
       content: `# Telegram Bot Configuration
 TELEGRAM_BOT_TOKEN=8048986424:AAE37IBwkCzE5oKtGCdN-mnnsMrcrlzGWUQ
 
-# Hugging Face API Key
+# Google Gemini API Key
+GEMINI_API_KEY=AIzaSyC9LYyefL8RAQAE-u0cYwIUuzM9NOfZMg4
+
+# Hugging Face API Key (for emotion detection)
 HUGGINGFACE_API_KEY=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
 
 # Bot Configuration
 BOT_NAME=ZERIL
 OWNER_TAG=@ash_yv
-HINGLISH_RATIO=0.6
+HINGLISH_RATIO=0.8
 
 # Optional: Database URL (for future features)
-# DATABASE_URL=postgresql://username:password@host:port/database
-
-# Optional: Redis URL (for caching)
-# REDIS_URL=redis://localhost:6379`
+# DATABASE_URL=postgresql://username:password@host:port/database`
     }
   };
 
@@ -791,9 +691,9 @@ HINGLISH_RATIO=0.6
 
   return (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6 rounded-lg">
-        <h2 className="text-2xl font-bold mb-2">🚀 Auto-Deploy Ready!</h2>
-        <p className="mb-4">Your ZERIL bot will automatically start responding on Telegram once deployed!</p>
+      <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-white p-6 rounded-lg">
+        <h2 className="text-2xl font-bold mb-2">🚀 Gemini-Powered ZERIL Ready!</h2>
+        <p className="mb-4">Your bot now uses Google Gemini for ultra-realistic conversations + HuggingFace for emotion detection!</p>
         <div className="flex gap-3">
           <Button onClick={deployToGitHub} variant="secondary">
             <Github className="w-4 h-4 mr-2" />
@@ -801,24 +701,21 @@ HINGLISH_RATIO=0.6
           </Button>
           <Button variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20">
             <Zap className="w-4 h-4 mr-2" />
-            Deploy Status: Ready
+            AI Status: Gemini + HuggingFace
           </Button>
         </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>📁 Project Files</CardTitle>
+          <CardTitle>📁 Updated Project Files</CardTitle>
         </CardHeader>
         <CardContent>
           <Tabs value={activeFile} onValueChange={setActiveFile}>
-            <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8">
+            <TabsList className="grid w-full grid-cols-3 lg:grid-cols-5">
               <TabsTrigger value="bot" className="text-xs">bot.py</TabsTrigger>
               <TabsTrigger value="requirements" className="text-xs">requirements.txt</TabsTrigger>
-              <TabsTrigger value="dockerfile" className="text-xs">Dockerfile</TabsTrigger>
               <TabsTrigger value="render" className="text-xs">render.yaml</TabsTrigger>
-              <TabsTrigger value="procfile" className="text-xs">Procfile</TabsTrigger>
-              <TabsTrigger value="railway" className="text-xs">railway.json</TabsTrigger>
               <TabsTrigger value="env" className="text-xs">.env</TabsTrigger>
             </TabsList>
 
@@ -863,17 +760,21 @@ HINGLISH_RATIO=0.6
 
       <Card>
         <CardHeader>
-          <CardTitle>🚀 Quick Setup Guide</CardTitle>
+          <CardTitle>🤖 AI Integration Summary</CardTitle>
         </CardHeader>
-        <CardContent>
-          <ol className="list-decimal list-inside space-y-2 text-sm">
-            <li>Create a new GitHub repository</li>
-            <li>Copy each file content into corresponding files in your repo</li>
-            <li>Push to GitHub</li>
-            <li>Deploy on Render/Railway (see Deploy tab)</li>
-            <li>Set environment variables in your deployment platform</li>
-            <li>Your ZERIL bot is live! 🎉</li>
-          </ol>
+        <CardContent className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Badge variant="default" className="bg-blue-500">Google Gemini</Badge>
+            <span className="text-sm">Ultra-realistic conversations & personality</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline">HuggingFace</Badge>
+            <span className="text-sm">Advanced emotion detection</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary">Fallback System</Badge>
+            <span className="text-sm">Works even if AI models fail</span>
+          </div>
         </CardContent>
       </Card>
     </div>

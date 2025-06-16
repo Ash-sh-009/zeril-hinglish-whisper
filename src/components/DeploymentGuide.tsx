@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -19,10 +18,10 @@ export const DeploymentGuide = () => {
   };
 
   const deployToRender = () => {
-    window.open('https://render.com/deploy?repo=https://github.com/YOUR_USERNAME/ZERIL-Bot', '_blank');
+    window.open('https://render.com/deploy', '_blank');
     toast({
       title: "🚀 Deploying to Render",
-      description: "Opening Render deployment page...",
+      description: "Your Gemini-powered ZERIL is ready to deploy!",
     });
   };
 
@@ -31,42 +30,42 @@ export const DeploymentGuide = () => {
       <Alert className="border-green-200 bg-green-50">
         <Zap className="h-4 w-4 text-green-600" />
         <AlertDescription className="text-green-800">
-          <strong>✨ Auto-Deploy Ready:</strong> Your ZERIL bot will automatically start working once deployed! 
-          All features included: Hinglish chat, emotion detection, and AI responses.
+          <strong>🚀 Gemini Integration Complete:</strong> Your ZERIL now uses Google Gemini for ultra-realistic conversations + HuggingFace for emotion detection! Ready to deploy!
         </AlertDescription>
       </Alert>
 
-      <Alert>
-        <AlertTriangle className="h-4 w-4" />
-        <AlertDescription>
-          <strong>Important:</strong> Telegram bots cannot be deployed on Vercel as they require persistent connections. 
-          Use Render (Free), Railway, or Heroku instead.
-        </AlertDescription>
-      </Alert>
-
-      <Card className="border-2 border-green-200 bg-gradient-to-r from-green-50 to-blue-50">
+      <Card className="border-2 border-purple-200 bg-gradient-to-r from-purple-50 to-pink-50">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CheckCircle className="w-5 h-5 text-green-500" />
-            🚀 One-Click Deploy to Render (FREE)
+            <CheckCircle className="w-5 h-5 text-purple-500" />
+            🤖 Gemini-Powered ZERIL Deploy
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="bg-white p-4 rounded-lg border">
-            <h4 className="font-semibold mb-2">Quick Setup (2 minutes):</h4>
-            <ol className="text-sm space-y-2 list-decimal list-inside">
-              <li>Push all files from the "Files" tab to your GitHub repository</li>
-              <li>Click the "Deploy to Render" button below</li>
-              <li>Connect your GitHub repo in Render</li>
-              <li>Environment variables are already configured!</li>
-              <li>Your ZERIL bot will be live in 3-5 minutes! 🎉</li>
-            </ol>
+            <h4 className="font-semibold mb-2">🎯 What's New in Your Bot:</h4>
+            <ul className="text-sm space-y-1 list-disc list-inside">
+              <li>🧠 <strong>Google Gemini AI</strong> - Ultra-realistic conversations</li>
+              <li>🎭 <strong>HuggingFace</strong> - Advanced emotion detection</li>
+              <li>💕 <strong>Enhanced Personality</strong> - More human-like responses</li>
+              <li>🗣️ <strong>Perfect Hinglish</strong> - Natural language mixing</li>
+              <li>🔄 <strong>Smart Fallbacks</strong> - Works even if one AI fails</li>
+            </ul>
+          </div>
+
+          <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+            <h4 className="font-semibold mb-2">🔑 API Keys Configured:</h4>
+            <div className="text-sm space-y-1 font-mono">
+              <div>✅ Telegram Bot: 8048986424:AAE37...</div>
+              <div>✅ Gemini API: AIzaSyC9LYyefL8R...</div>
+              <div>✅ HuggingFace: hf_varcbMWVBBER...</div>
+            </div>
           </div>
 
           <div className="flex gap-3">
             <Button onClick={deployToRender} className="bg-purple-600 hover:bg-purple-700">
               <ExternalLink className="w-4 h-4 mr-2" />
-              Deploy to Render Now
+              Deploy Gemini ZERIL Now
             </Button>
             <Button 
               variant="outline"
@@ -75,12 +74,6 @@ export const DeploymentGuide = () => {
               Create GitHub Repo
             </Button>
           </div>
-
-          <Alert className="bg-blue-50 border-blue-200">
-            <AlertDescription className="text-blue-800">
-              <strong>🤖 Bot Status:</strong> Once deployed, test your bot by sending "/start" or "ZERIL" in Telegram!
-            </AlertDescription>
-          </Alert>
         </CardContent>
       </Card>
 
@@ -179,36 +172,34 @@ export const DeploymentGuide = () => {
               <CardTitle>Deploy on Railway</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <Badge variant="outline" className="mb-2">$5/month after free trial</Badge>
-                
-                <div className="space-y-3">
-                  <h4 className="font-semibold">Quick Deploy:</h4>
-                  <div className="bg-gray-100 p-3 rounded-lg font-mono text-sm">
-                    <div className="flex items-center justify-between">
-                      <span>npm install -g @railway/cli</span>
-                      <Button size="sm" variant="ghost" onClick={() => copyToClipboard('npm install -g @railway/cli')}>
-                        <Copy className="w-3 h-3" />
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="bg-gray-100 p-3 rounded-lg font-mono text-sm">
-                    <div className="flex items-center justify-between">
-                      <span>railway login && railway deploy</span>
-                      <Button size="sm" variant="ghost" onClick={() => copyToClipboard('railway login && railway deploy')}>
-                        <Copy className="w-3 h-3" />
-                      </Button>
-                    </div>
+              <Badge variant="outline" className="mb-2">$5/month after free trial</Badge>
+              
+              <div className="space-y-3">
+                <h4 className="font-semibold">Quick Deploy:</h4>
+                <div className="bg-gray-100 p-3 rounded-lg font-mono text-sm">
+                  <div className="flex items-center justify-between">
+                    <span>npm install -g @railway/cli</span>
+                    <Button size="sm" variant="ghost" onClick={() => copyToClipboard('npm install -g @railway/cli')}>
+                      <Copy className="w-3 h-3" />
+                    </Button>
                   </div>
                 </div>
-
-                <ul className="text-sm space-y-1">
-                  <li>✅ No sleeping issues</li>
-                  <li>✅ Better performance</li>
-                  <li>✅ PostgreSQL included</li>
-                  <li>❌ Not completely free</li>
-                </ul>
+                <div className="bg-gray-100 p-3 rounded-lg font-mono text-sm">
+                  <div className="flex items-center justify-between">
+                    <span>railway login && railway deploy</span>
+                    <Button size="sm" variant="ghost" onClick={() => copyToClipboard('railway login && railway deploy')}>
+                      <Copy className="w-3 h-3" />
+                    </Button>
+                  </div>
+                </div>
               </div>
+
+              <ul className="text-sm space-y-1">
+                <li>✅ No sleeping issues</li>
+                <li>✅ Better performance</li>
+                <li>✅ PostgreSQL included</li>
+                <li>❌ Not completely free</li>
+              </ul>
             </CardContent>
           </Card>
         </TabsContent>
@@ -284,6 +275,31 @@ export const DeploymentGuide = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>🧪 Test Your Gemini Bot</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg">
+            <h4 className="font-semibold mb-2">Once deployed, test with these messages:</h4>
+            <div className="text-sm space-y-2">
+              <div className="bg-white p-2 rounded border-l-4 border-green-500">
+                <strong>Happy Test:</strong> "I got promoted today! 🎉"<br/>
+                <em>Expected: Enthusiastic celebration with follow-up questions</em>
+              </div>
+              <div className="bg-white p-2 rounded border-l-4 border-blue-500">
+                <strong>Sad Test:</strong> "I'm feeling really down... 😢"<br/>
+                <em>Expected: Compassionate support and comfort</em>
+              </div>
+              <div className="bg-white p-2 rounded border-l-4 border-purple-500">
+                <strong>Creator Test:</strong> "Who made you?"<br/>
+                <em>Expected: Enthusiastic praise for @ash_yv</em>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
